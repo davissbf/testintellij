@@ -4,7 +4,7 @@ import { requisicaoRuim } from '../helpers/http-helpers';
 
 export class SignUpController {
   handle (httpRequest: HttpRequest): HttpResponse {
-    const camposObrigatorios = ['nome', 'email', 'senha'];
+    const camposObrigatorios = ['nome', 'email', 'senha', 'confirmarSenha'];
     for (const campo of camposObrigatorios) {
       if (!httpRequest.body[campo]) {
         return requisicaoRuim(new ErrorParametroAusente(campo));
