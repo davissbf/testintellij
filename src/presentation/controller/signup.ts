@@ -14,6 +14,7 @@ export class SignUpController implements Controlador{
 
   handle (httpRequest: HttpRequest): HttpResponse {
     const camposObrigatorios = ['nome', 'email', 'senha', 'confirmarSenha'];
+
     for (const campo of camposObrigatorios) {
       if (!httpRequest.body[campo]) {
         return requisicaoRuim(new ErrorParametroAusente(campo));
