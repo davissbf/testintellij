@@ -1,4 +1,5 @@
 import { SignUpController } from "./signup";
+import { ErrorParametroAusente } from '../errors/error-parametro-ausente';
 
 describe('SignUp Controller', () => {
   test('Retornar erro 400, se o nome não for enviado', () => {
@@ -12,7 +13,7 @@ describe('SignUp Controller', () => {
     }
     const httpResponse = sut.handle(httpRequest);
     expect(httpResponse.statusCode).toBe(400);
-    expect(httpResponse.body).toEqual(new Error ('Esperado parâmetro: nome'));
+    expect(httpResponse.body).toEqual(new ErrorParametroAusente('nome'));
   });
 });
 
@@ -27,5 +28,5 @@ test('Retornar erro 400, se o email não for enviado', () => {
   }
   const httpResponse = sut.handle(httpRequest);
   expect(httpResponse.statusCode).toBe(400);
-  expect(httpResponse.body).toEqual(new Error ('Esperado parâmetro: email'));
+  expect(httpResponse.body).toEqual(new ErrorParametroAusente('email'));
 });
