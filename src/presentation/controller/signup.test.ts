@@ -1,9 +1,13 @@
 import { SignUpController } from "./signup";
 import { ErrorParametroAusente } from '../errors/error-parametro-ausente';
 
+const makeSut = (): SignUpController => {
+  return new SignUpController();
+}
+
 describe('SignUp Controller', () => {
   test('Retornar erro 400, se o nome não for enviado', () => {
-    const sut = new SignUpController();
+    const sut = makeSut();
     const httpRequisicao = {
       body: {
         email: 'any_email@email.com',
@@ -18,7 +22,7 @@ describe('SignUp Controller', () => {
 });
 
 test('Retornar erro 400, se o email não for enviado', () => {
-  const sut = new SignUpController();
+  const sut = makeSut();
   const httpRequisicao = {
     body: {
       nome: 'any_nome',
@@ -32,7 +36,7 @@ test('Retornar erro 400, se o email não for enviado', () => {
 });
 
 test('Retornar erro 400, se a senha não for enviada', () => {
-  const sut = new SignUpController();
+  const sut = makeSut();
   const httpRequisicao = {
     body: {
       nome: 'any_nome',
@@ -46,7 +50,7 @@ test('Retornar erro 400, se a senha não for enviada', () => {
 });
 
 test('Retornar erro 400, se o consfirmar senha não for enviado', () => {
-  const sut = new SignUpController();
+  const sut = makeSut();
   const httpRequisicao = {
     body: {
       nome: 'any_nome',
