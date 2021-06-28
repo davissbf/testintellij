@@ -30,3 +30,17 @@ test('Retornar erro 400, se o email não for enviado', () => {
   expect(httpResposta.statusCode).toBe(400);
   expect(httpResposta.body).toEqual(new ErrorParametroAusente('email'));
 });
+
+test('Retornar erro 400, se a senha não for enviada', () => {
+  const sut = new SignUpController();
+  const httpRequisicao = {
+    body: {
+      nome: 'any_nome',
+      email: 'any_email@email.com',
+      confirmarSenha: 'any_password',
+    }
+  }
+  const httpResposta = sut.handle(httpRequisicao);
+  expect(httpResposta.statusCode).toBe(400);
+  expect(httpResposta.body).toEqual(new ErrorParametroAusente('senha'));
+});
