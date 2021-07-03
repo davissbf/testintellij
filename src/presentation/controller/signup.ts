@@ -4,6 +4,7 @@ import { ErrorParametroInvalido } from '../errors/error-parametro-invalido'
 import { requisicaoRuim } from '../helpers/http-helpers'
 import { Controlador } from '../protocols/controller'
 import { ValidadorEmail } from '../protocols/validador-email'
+import { ServerError } from '../errors/server-error'
 
 export class SignUpController implements Controlador {
   private readonly validadorEmail: ValidadorEmail
@@ -13,27 +14,34 @@ export class SignUpController implements Controlador {
   }
 
   handle (httpRequest: HttpRequest): HttpResponse {
-    const camposObrigatorios = ['nome', 'email', 'senha', 'confirmarSenha']
+    try {
+      const camposObrigatorios = ['nome', 'email', 'senha', 'confirmarSenha']
 
-    // camposObrigatorios.forEach((campo) => {
-    //   if (!httpRequest.body[campo]) {
-    //     console.log('TESTANDO CAMPO', typeof(campo));
-    //     return requisicaoRuim(new ErrorParametroAusente(campo));
-    //   }
-    // });
+      // camposObrigatorios.forEach((campo) => {
+      //   if (!httpRequest.body[campo]) {
+      //     console.log('TESTANDO CAMPO', typeof(campo));
+      //     return requisicaoRuim(new ErrorParametroAusente(campo));
+      //   }
+      // });
 
-    for (const campo of camposObrigatorios) {
-      if (!httpRequest.body[campo]) {
-        console.log('TESTANDO CAMPO', typeof (campo))
-        return requisicaoRuim(new ErrorParametroAusente(campo))
+      for (const campo of camposObrigatorios) {
+        if (!httpRequest.body[campo]) {
+          console.log('TESTANDO CAMPO', typeof (campo))
+          return requisicaoRuim(new ErrorParametroAusente(campo))
+        }
       }
-    }
 
-    const valido = this.validadorEmail.emailValido(httpRequest.body.email)
+      const valido = this.validadorEmail.emailValido(httpRequest.body.email)
 
-    if (!valido) {
-      console.log('Cheguei')
-      return requisicaoRuim(new ErrorParametroInvalido('email'))
+      if (!valido) {
+        console.log('Cheguei')
+        return requisicaoRuim(new ErrorParametroInvalido('email'))
+      }
+    } catch (error) {
+      return {
+        statusCode: 500,
+        body: new ServerError()
+      }
     }
   }
 }

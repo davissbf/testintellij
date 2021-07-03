@@ -2,6 +2,7 @@ import { SignUpController } from './signup'
 import { ErrorParametroAusente } from '../errors/error-parametro-ausente'
 import { ValidadorEmail } from '../protocols/validador-email'
 import { ErrorParametroInvalido } from '../errors/error-parametro-invalido'
+import { ServerError } from '../errors/server-error'
 
 interface SutTypes {
   sut: SignUpController
@@ -72,5 +73,27 @@ describe('SignUp Controller', () => {
 
     sut.handle(httpRequisicao)
     expect(spyValido).toHaveBeenCalledWith('qualquer_email@email.com')
+  })
+  test('Retornar 500, se acontecer alguma exceção', () => {
+    class ValidadorEmailStub implements ValidadorEmail {
+      emailValido (email: string): boolean {
+        throw new Error()
+      }
+    }
+
+    const validaorEmailStub = new ValidadorEmailStub()
+    const sut = new SignUpController(validaorEmailStub)
+    const httpRequisicao = {
+      body: {
+        nome: 'qualquer_nome',
+        email: 'qualquer_email@email.com',
+        senha: 'qualquer_password',
+        confirmarSenha: 'qualquer_password'
+      }
+    }
+
+    const httpResposta = sut.handle(httpRequisicao)
+    expect(httpResposta.statusCode).toBe(500)
+    expect(httpResposta.body).toEqual(new ServerError())
   })
 })
