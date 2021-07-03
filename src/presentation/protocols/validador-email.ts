@@ -1,3 +1,3 @@
 export interface ValidadorEmail {
-  emailValido(email: string): boolean;
+  emailValido: (email: string) => boolean
 }
